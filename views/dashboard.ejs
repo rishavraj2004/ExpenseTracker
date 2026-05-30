@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <aside class="sidebar">
+
+      <div class="logo">
+        <h2>₹ ExpenseTrack</h2>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="/dashboard" class="active">Dashboard</a></li>
+          <li><a href="#">Transactions</a></li>
+          <li><a href="#">Budgets</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="#">Settings</a></li>
+        </ul>
+      </nav>
+
+      <form action="/auth/logout" method="POST">
+        <button class="logout-btn">Logout</button>
+      </form>
+
+    </aside>
+
+    <main class="main">
+
+      <div class="header">
+        <h1>Welcome, <%= user.firstName %> 👋</h1>
+        <p>Manage your finances with confidence.</p>
+      </div>
+
+      <div class="cards">
+
+        <div class="card income">
+          <h3>Total Income</h3>
+          <p>₹0</p>
+        </div>
+
+        <div class="card expense">
+          <h3>Total Expense</h3>
+          <p>₹0</p>
+        </div>
+
+        <div class="card balance">
+          <h3>Balance</h3>
+          <p>₹0</p>
+        </div>
+
+        <div class="card savings">
+          <h3>Savings</h3>
+          <p>₹0</p>
+        </div>
+
+      </div>
+
+      <div class="recent-section">
+
+        <h2>Recent Transactions</h2>
+
+        <div class="empty-state">
+          <p>No transactions available.</p>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+
+</html>

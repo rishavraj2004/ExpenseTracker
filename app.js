@@ -5,7 +5,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const User = require('./models/user');
-const MongoDBStore = require('connect-mongodb-session')(session);
+const MongoStore = require('connect-mongo').default;
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -17,20 +18,26 @@ mongoose.connect(MONGODB_URI)
         console.log("Failed", err);
     })
 
-const store = new MongoDBStore({
-    uri: MONGODB_URI,
-    collection: 'sessions',
 
-})
-
-app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store: store }))
-
+app.use(session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: MONGODB_URI,
+        collectionName: 'sessions'
+    })
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use('/auth', authRoutes);
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
+app.use(dashboardRoutes);
+
+
+
 
 app.get("/", (req, res) => {
     res.redirect('/auth/login');

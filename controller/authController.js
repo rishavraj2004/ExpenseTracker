@@ -28,26 +28,39 @@ exports.getSignup = (req, res, next) => {
 
     });
 };
-
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+
     User.findOne({ email: email })
         .then(user => {
-            bcrypt.compare(password, user.password)
-                .then(doMatch => {
-                    if (doMatch) {
-                        req.session.isLoggedIn = true;
-                        req.session.user = user;
-                        return req.session.save(err => {
-                            console.log(err);
-                            res.redirect('/')
-                        });
-                    }
-                })
-        })
-}
 
+            if (!user) {
+                console.log('User not found');
+                return res.redirect('/auth/login');
+            }
+
+            return bcrypt.compare(password, user.password)
+                .then(doMatch => {
+
+                    if (!doMatch) {
+                        console.log('Wrong password');
+                        return res.redirect('/auth/login');
+                    }
+
+                    req.session.isLoggedIn = true;
+                    req.session.user = user;
+
+                    req.session.save(err => {
+                        console.log('Session save error:', err);
+                        res.redirect('/dashboard');
+                    });
+                });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 
 
 
