@@ -1,155 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expense Tracker Dashboard</title>
-
-  <link rel="stylesheet" href="/css/dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — ExpenseTrack</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
   <div class="dashboard-container">
 
     <!-- Header -->
-
     <header class="dashboard-header">
-
-      <div>
-        <h1>Welcome, <%= user.firstName %> 👋</h1>
-        <p>Manage your expenses efficiently</p>
+      <div class="header-brand">
+        <span class="brand-symbol">₹</span>
+        <span class="brand-name">Expense<span>Track</span></span>
       </div>
-
-      <form action="/auth/logout" method="POST">
-        <button class="logout-btn">
-          Logout
-        </button>
-      </form>
-
+      <div class="header-right">
+        <div class="user-chip">
+          <div class="user-avatar"><%= user.firstName[0] %><%= user.lastName ? user.lastName[0] : '' %></div>
+          <span class="user-name">Welcome, <%= user.firstName %></span>
+        </div>
+        <form action="/auth/logout" method="POST">
+          <button type="submit" class="logout-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </button>
+        </form>
+      </div>
     </header>
 
-    <!-- Summary Card -->
+    <!-- Greeting -->
+    <div class="greeting">
+      <h1>Good day, <%= user.firstName %> 👋</h1>
+      <p>Manage your expenses efficiently</p>
+    </div>
 
-    <section class="summary-card">
-
-      <h3>Total Expenses</h3>
-
-      <h2>
-        ₹ <%= totalExpense %>
-      </h2>
-
+    <!-- Summary Strip -->
+    <section class="summary-strip">
+      <div class="s-card">
+        <div class="s-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+          Total expenses
+        </div>
+        <div class="s-value blue">₹<%= totalExpense.toLocaleString('en-IN') %></div>
+        <div class="s-sub">This month</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Transactions
+        </div>
+        <div class="s-value"><%= expenses.length %></div>
+        <div class="s-sub">Recorded so far</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Last expense
+        </div>
+        <% if (expenses.length > 0) { %>
+          <div class="s-value red">₹<%= expenses[0].amount.toLocaleString('en-IN') %></div>
+          <div class="s-sub"><%= expenses[0].spentOn %> · <%= expenses[0].createdAt.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }) %></div>
+        <% } else { %>
+          <div class="s-value" style="font-size:16px;color:var(--ink-muted);">—</div>
+          <div class="s-sub">No expenses yet</div>
+        <% } %>
+      </div>
     </section>
 
     <!-- Add Expense Form -->
-
-    <section class="form-card">
-
-      <h2>Add New Expense</h2>
-
+    <section class="add-card">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add new expense
+      </h2>
       <form action="/expenses/add" method="POST">
-
-        <div class="form-group">
-
-          <input type="number" name="amount" placeholder="Amount" required>
-
-          <input type="text" name="spentOn" placeholder="Spent On" required>
-
+        <div class="form-row">
+          <div class="form-field">
+            <label for="amount">Amount (₹)</label>
+            <input type="number" id="amount" name="amount" placeholder="0.00" min="0" step="0.01" required />
+          </div>
+          <div class="form-field">
+            <label for="spentOn">Spent on</label>
+            <input type="text" id="spentOn" name="spentOn" placeholder="e.g. Groceries" required />
+          </div>
+          <div class="form-field">
+            <label for="note">Note (optional)</label>
+            <input type="text" id="note" name="note" placeholder="Any details..." />
+          </div>
         </div>
-
-        <input type="text" name="note" placeholder="Note (Optional)">
-
         <button type="submit" class="add-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add Expense
         </button>
-
       </form>
-
     </section>
 
     <!-- Expense List -->
+    <section class="expense-card">
+      <div class="expense-header">
+        <h2>Recent expenses</h2>
+        <span class="expense-count"><%= expenses.length %> entr<%= expenses.length === 1 ? 'y' : 'ies' %></span>
+      </div>
 
-    <section class="expense-section">
-
-      <h2>Recent Expenses</h2>
-
-      <% if(expenses.length===0){ %>
-
+      <% if (expenses.length === 0) { %>
         <div class="empty-state">
-
-          <p>No expenses found.</p>
-
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <p>No expenses recorded yet.</p>
+          <span>Add your first expense above to get started.</span>
         </div>
-
-        <% } else { %>
-
+      <% } else { %>
+        <div class="table-wrap">
           <table>
-
             <thead>
-
               <tr>
                 <th>Amount</th>
-                <th>Spent On</th>
+                <th>Spent on</th>
                 <th>Note</th>
                 <th>Date</th>
                 <th>Actions</th>
               </tr>
-
             </thead>
-
             <tbody>
-
-              <% expenses.forEach(expense=> { %>
-
+              <% expenses.forEach(expense => { %>
                 <tr>
-
+                  <td><span class="amount-cell">₹<%= expense.amount.toLocaleString('en-IN') %></span></td>
+                  <td><span class="tag"><%= expense.spentOn %></span></td>
+                  <td class="note-cell"><%= expense.note || '—' %></td>
+                  <td class="date-cell"><%= expense.createdAt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) %></td>
                   <td>
-                    ₹<%= expense.amount %>
+                    <div class="action-buttons">
+                      <a href="/expenses/edit/<%= expense._id %>" class="edit-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Edit
+                      </a>
+                      <form action="/expenses/delete/<%= expense._id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="delete-btn" onclick="return confirm('Delete this expense?')">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                          Delete
+                        </button>
+                      </form>
+                    </div>
                   </td>
-
-                  <td>
-                    <%= expense.spentOn %>
-                  </td>
-
-                  <td>
-                    <%= expense.note || '-' %>
-                  </td>
-
-                  <td>
-                    <%= expense.createdAt.toLocaleDateString() %>
-                  </td>
-
-                  <td class="action-buttons">
-
-                    <a href="/expenses/edit/<%= expense._id %>" class="edit-btn">
-                      Edit
-                    </a>
-
-                    <form action="/expenses/delete/<%= expense._id %>" method="POST">
-
-                      <button type="submit" class="delete-btn">
-                        Delete
-                      </button>
-
-                    </form>
-
-                  </td>
-
                 </tr>
-
-                <% }) %>
-
+              <% }) %>
             </tbody>
-
           </table>
-
-          <% } %>
-
+        </div>
+      <% } %>
     </section>
 
   </div>
 
 </body>
-
 </html>

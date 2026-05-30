@@ -1,38 +1,131 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Edit Expense</title>
-
-    <link rel="stylesheet" href="/css/dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Expense — ExpenseTrack</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    .edit-wrap { max-width: 500px; margin: 0 auto; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-muted); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb svg { flex-shrink: 0; opacity: .5; }
+    .edit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 30px; }
+    .edit-card-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .edit-card-icon { width: 40px; height: 40px; border-radius: 11px; background: #eff6ff; color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .edit-card-hdr h2 { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .edit-card-hdr p { font-size: 12.5px; color: var(--ink-muted); }
+    .edit-fields { display: flex; flex-direction: column; gap: 18px; }
+    .edit-field { display: flex; flex-direction: column; gap: 6px; }
+    .edit-field label { font-size: 13px; font-weight: 500; color: var(--ink-soft); }
+    .edit-field label .req { color: var(--red); margin-left: 2px; }
+    .edit-iw { position: relative; display: flex; align-items: center; }
+    .edit-ico { position: absolute; left: 13px; color: var(--ink-muted); pointer-events: none; display: flex; }
+    .edit-iw input { width: 100%; padding: 11px 13px 11px 38px; border: 1px solid var(--border); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); background: var(--surface); outline: none; transition: border-color .2s, box-shadow .2s; }
+    .edit-iw input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .edit-iw input::placeholder { color: #d1d5db; }
+    .edit-iw:focus-within .edit-ico { color: var(--accent); }
+    .field-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 1px; }
+    .edit-actions { display: flex; gap: 10px; margin-top: 6px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .cancel-btn { padding: 11px 20px; border-radius: var(--radius); border: 1px solid var(--border); background: none; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink-soft); cursor: pointer; transition: background .2s; text-decoration: none; display: inline-flex; align-items: center; }
+    .cancel-btn:hover { background: var(--surface-2); color: var(--ink); }
+    .save-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 500; cursor: pointer; transition: background .2s, transform .2s; }
+    .save-btn:hover { background: var(--accent-hov); transform: translateY(-1px); }
+    .save-btn:active { transform: translateY(0); }
+  </style>
 </head>
-
 <body>
 
-    <div class="dashboard-container">
+  <div class="dashboard-container">
 
-        <section class="form-card">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-brand">
+        <span class="brand-symbol">₹</span>
+        <span class="brand-name">Expense<span>Track</span></span>
+      </div>
+      <a href="/dashboard" class="logout-btn" style="text-decoration:none;border-color:rgba(0,0,0,0.1);background:#fff;color:var(--ink-soft);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to dashboard
+      </a>
+    </header>
 
-            <h2>Edit Expense</h2>
+    <div class="edit-wrap">
 
-            <form action="/expenses/edit/<%= expense._id %>" method="POST">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="/dashboard">Dashboard</a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Edit expense</span>
+      </div>
 
-                <input type="number" name="amount" value="<%= expense.amount %>" required>
+      <!-- Edit Card -->
+      <div class="edit-card">
 
-                <input type="text" name="spentOn" value="<%= expense.spentOn %>" required>
+        <div class="edit-card-hdr">
+          <div class="edit-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div>
+            <h2>Edit expense</h2>
+            <p>Update the details below and save your changes</p>
+          </div>
+        </div>
 
-                <input type="text" name="note" value="<%= expense.note %>">
+        <form action="/expenses/edit/<%= expense._id %>" method="POST">
 
-                <button type="submit" class="add-btn">
-                    Save Changes
-                </button>
+          <div class="edit-fields">
 
-            </form>
+            <div class="edit-field">
+              <label for="amount">Amount (₹) <span class="req">*</span></label>
+              <div class="edit-iw">
+                <span class="edit-ico">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                <input type="number" id="amount" name="amount" value="<%= expense.amount %>" placeholder="0.00" min="0" step="0.01" required />
+              </div>
+            </div>
 
-        </section>
+            <div class="edit-field">
+              <label for="spentOn">Spent on <span class="req">*</span></label>
+              <div class="edit-iw">
+                <span class="edit-ico">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </span>
+                <input type="text" id="spentOn" name="spentOn" value="<%= expense.spentOn %>" placeholder="e.g. Groceries" required />
+              </div>
+            </div>
 
+            <div class="edit-field">
+              <label for="note">Note</label>
+              <div class="edit-iw">
+                <span class="edit-ico">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </span>
+                <input type="text" id="note" name="note" value="<%= expense.note || '' %>" placeholder="Any details... (optional)" />
+              </div>
+              <span class="field-hint">Optional — add any extra context about this expense</span>
+            </div>
+
+          </div>
+
+          <div class="edit-actions">
+            <a href="/dashboard" class="cancel-btn">Cancel</a>
+            <button type="submit" class="save-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Save changes
+            </button>
+          </div>
+
+        </form>
+
+      </div>
     </div>
 
-</body>
+  </div>
 
+</body>
 </html>
