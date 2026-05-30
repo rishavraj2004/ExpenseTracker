@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Expense</title>
+
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <section class="form-card">
+
+            <h2>Edit Expense</h2>
+
+            <form action="/expenses/edit/<%= expense._id %>" method="POST">
+
+                <input type="number" name="amount" value="<%= expense.amount %>" required>
+
+                <input type="text" name="spentOn" value="<%= expense.spentOn %>" required>
+
+                <input type="text" name="note" value="<%= expense.note %>">
+
+                <button type="submit" class="add-btn">
+                    Save Changes
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>

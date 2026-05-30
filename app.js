@@ -7,6 +7,8 @@ const session = require('express-session');
 const User = require('./models/user');
 const MongoStore = require('connect-mongo').default;
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const expenseRoutes = require('./routes/expenseRoutes');
+
 
 const app = express();
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -35,7 +37,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
 app.use(dashboardRoutes);
-
+app.use(expenseRoutes);
 
 
 

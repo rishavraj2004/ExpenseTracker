@@ -4,79 +4,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Expense Tracker Dashboard</title>
 
   <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="dashboard-container">
 
-    <aside class="sidebar">
+    <!-- Header -->
 
-      <div class="logo">
-        <h2>₹ ExpenseTrack</h2>
+    <header class="dashboard-header">
+
+      <div>
+        <h1>Welcome, <%= user.firstName %> 👋</h1>
+        <p>Manage your expenses efficiently</p>
       </div>
-
-      <nav>
-        <ul>
-          <li><a href="/dashboard" class="active">Dashboard</a></li>
-          <li><a href="#">Transactions</a></li>
-          <li><a href="#">Budgets</a></li>
-          <li><a href="#">Reports</a></li>
-          <li><a href="#">Settings</a></li>
-        </ul>
-      </nav>
 
       <form action="/auth/logout" method="POST">
-        <button class="logout-btn">Logout</button>
+        <button class="logout-btn">
+          Logout
+        </button>
       </form>
 
-    </aside>
+    </header>
 
-    <main class="main">
+    <!-- Summary Card -->
 
-      <div class="header">
-        <h1>Welcome, <%= user.firstName %> 👋</h1>
-        <p>Manage your finances with confidence.</p>
-      </div>
+    <section class="summary-card">
 
-      <div class="cards">
+      <h3>Total Expenses</h3>
 
-        <div class="card income">
-          <h3>Total Income</h3>
-          <p>₹0</p>
+      <h2>
+        ₹ <%= totalExpense %>
+      </h2>
+
+    </section>
+
+    <!-- Add Expense Form -->
+
+    <section class="form-card">
+
+      <h2>Add New Expense</h2>
+
+      <form action="/expenses/add" method="POST">
+
+        <div class="form-group">
+
+          <input type="number" name="amount" placeholder="Amount" required>
+
+          <input type="text" name="spentOn" placeholder="Spent On" required>
+
         </div>
 
-        <div class="card expense">
-          <h3>Total Expense</h3>
-          <p>₹0</p>
-        </div>
+        <input type="text" name="note" placeholder="Note (Optional)">
 
-        <div class="card balance">
-          <h3>Balance</h3>
-          <p>₹0</p>
-        </div>
+        <button type="submit" class="add-btn">
+          Add Expense
+        </button>
 
-        <div class="card savings">
-          <h3>Savings</h3>
-          <p>₹0</p>
-        </div>
+      </form>
 
-      </div>
+    </section>
 
-      <div class="recent-section">
+    <!-- Expense List -->
 
-        <h2>Recent Transactions</h2>
+    <section class="expense-section">
+
+      <h2>Recent Expenses</h2>
+
+      <% if(expenses.length===0){ %>
 
         <div class="empty-state">
-          <p>No transactions available.</p>
+
+          <p>No expenses found.</p>
+
         </div>
 
-      </div>
+        <% } else { %>
 
-    </main>
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Amount</th>
+                <th>Spent On</th>
+                <th>Note</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <% expenses.forEach(expense=> { %>
+
+                <tr>
+
+                  <td>
+                    ₹<%= expense.amount %>
+                  </td>
+
+                  <td>
+                    <%= expense.spentOn %>
+                  </td>
+
+                  <td>
+                    <%= expense.note || '-' %>
+                  </td>
+
+                  <td>
+                    <%= expense.createdAt.toLocaleDateString() %>
+                  </td>
+
+                  <td class="action-buttons">
+
+                    <a href="/expenses/edit/<%= expense._id %>" class="edit-btn">
+                      Edit
+                    </a>
+
+                    <form action="/expenses/delete/<%= expense._id %>" method="POST">
+
+                      <button type="submit" class="delete-btn">
+                        Delete
+                      </button>
+
+                    </form>
+
+                  </td>
+
+                </tr>
+
+                <% }) %>
+
+            </tbody>
+
+          </table>
+
+          <% } %>
+
+    </section>
 
   </div>
 

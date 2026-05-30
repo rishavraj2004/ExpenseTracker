@@ -2,141 +2,221 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body {
   background: #f5f7fb;
+  color: #333;
 }
 
-.container {
-  display: flex;
-  min-height: 100vh;
+.dashboard-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 30px auto;
 }
 
-/* Sidebar */
+/* Header */
 
-.sidebar {
-  width: 260px;
-  background: #111827;
-  color: white;
-  padding: 30px 20px;
+.dashboard-header {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
-.logo h2 {
-  font-size: 24px;
-  margin-bottom: 40px;
+.dashboard-header h1 {
+  font-size: 2rem;
+  color: #1e293b;
 }
 
-.sidebar ul {
-  list-style: none;
+.dashboard-header p {
+  color: #64748b;
+  margin-top: 5px;
 }
 
-.sidebar li {
-  margin-bottom: 15px;
-}
-
-.sidebar a {
-  text-decoration: none;
-  color: #d1d5db;
-  display: block;
-  padding: 12px;
-  border-radius: 8px;
-  transition: .3s;
-}
-
-.sidebar a:hover,
-.sidebar a.active {
-  background: #1f2937;
-  color: white;
-}
+/* Logout */
 
 .logout-btn {
-  width: 100%;
-  border: none;
   background: #ef4444;
   color: white;
-  padding: 12px;
+  border: none;
+  padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-/* Main */
-
-.main {
-  flex: 1;
-  padding: 40px;
+.logout-btn:hover {
+  background: #dc2626;
 }
 
-.header h1 {
-  font-size: 32px;
-  color: #111827;
-}
+/* Cards */
 
-.header p {
-  margin-top: 10px;
-  color: #6b7280;
-}
-
-.cards {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.card {
+.summary-card,
+.form-card,
+.expense-section {
   background: white;
-  border-radius: 15px;
+  border-radius: 16px;
   padding: 25px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.card h3 {
-  color: #6b7280;
-  font-size: 16px;
+.summary-card h3 {
+  color: #64748b;
   margin-bottom: 10px;
 }
 
-.card p {
-  font-size: 30px;
-  font-weight: bold;
-  color: #111827;
+.summary-card h2 {
+  font-size: 2.5rem;
+  color: #16a34a;
 }
 
-.income {
-  border-left: 5px solid #22c55e;
-}
+/* Form */
 
-.expense {
-  border-left: 5px solid #ef4444;
-}
-
-.balance {
-  border-left: 5px solid #3b82f6;
-}
-
-.savings {
-  border-left: 5px solid #a855f7;
-}
-
-.recent-section {
-  margin-top: 40px;
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
-}
-
-.recent-section h2 {
+.form-card h2 {
   margin-bottom: 20px;
 }
 
+.form-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-group input {
+  flex: 1;
+}
+
+.form-card input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dbe2ea;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.form-card input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Add Button */
+
+.add-btn {
+  margin-top: 15px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Expense Table */
+
+.expense-section h2 {
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  text-align: left;
+  padding: 15px;
+  color: #475569;
+  font-size: 14px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Actions */
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-btn {
+  text-decoration: none;
+  background: #f59e0b;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* Empty State */
+
 .empty-state {
-  color: #6b7280;
   text-align: center;
   padding: 40px;
+  color: #94a3b8;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .form-group {
+    flex-direction: column;
+  }
+
+  .expense-section {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 700px;
+  }
 }
