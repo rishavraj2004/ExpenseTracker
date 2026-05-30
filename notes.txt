@@ -1,0 +1,2 @@
+tut8Mel9YCentBja
+mongodb+srv://rishavrajhacksofficial_db_user:tut8Mel9YCentBja@cluster0.7xsvmrd.mongodb.net/
